@@ -33,12 +33,11 @@
         `;
             return snippet;
         };
-        fetch("{{ url_for("api.snippets_list") }}")
+        fetch("{{ url_for("api.snippets", snippet_id=snippet_id) }}")
             .then(data => data.json())
-            .then(data => data.result.map(snippet => {
-                    const html = render_snippet(snippet);
-                    document.body.appendChild(html)
-                }
-            ));
+            .then(snippet => {
+                const html = render_snippet(snippet.result);
+                document.body.appendChild(html)
+            });
     </script>
 {% endblock %}

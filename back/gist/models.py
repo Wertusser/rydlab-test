@@ -1,5 +1,7 @@
 from peewee import *
 from gist.app import db
+from uuid import uuid4
+from datetime import datetime
 
 
 class BaseModel(Model):
@@ -8,15 +10,15 @@ class BaseModel(Model):
 
 
 class Snippet(BaseModel):
-    snippet_id = UUIDField(primary_key=True, unique=True)
+    snippet_id = UUIDField(unique=True, default=uuid4)
     title = CharField()
     description = TextField()
-    created_at = DateField()
+    created_at = DateTimeField(default=datetime.now)
     is_public = BooleanField()
 
 
 class File(BaseModel):
-    snippet = ForeignKeyField(Snippet, backref='snippets')
+    snippet = ForeignKeyField(Snippet, backref='files')
     filename = CharField()
     text = TextField()
     extension = CharField()

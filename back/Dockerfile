@@ -4,5 +4,4 @@ WORKDIR /back
 COPY requirements.txt /back/
 RUN pip install -r requirements.txt
 COPY . /back/
-CMD ["sh", "./initdb.sh"]
-ENTRYPOINT ["gunicorn", "-c", "gunicorn.conf.py", "gist.app:app"]
+ENTRYPOINT ["sh", "./entrypoint.sh"]
