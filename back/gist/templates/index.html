@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}
+Все сниппеты
+{% endblock %}
+{% block content %}
+{% endblock %}
+{% block js %}
+    <script>
+    const render_file = data => {
+        const file = document.createElement('div');
+        file.classList.add('file');
+        file.innerHTML = `
+            <div class="header">
+                <span>${data.filename}</span>
+            </div>
+            <div class="text">
+                ${data.text}
+            </div>
+        `;
+        return file;
+    };
+    const render_snippet = data => {
+        const snippet = document.createElement('div');
+        snippet.classList.add('snippet');
+        snippet.innerHTML = `
+            <div class="header">
+                <a href="/snippet/${data.snippet_id}">${data.title}</a>
+            </div>
+            <div class="files">
+                ${data.files.map(file => render_file(file).innerHTML)}
+            </div>
+        `;
+        return snippet;
+    };
+    fetch("{{ url_for("api.snippets_list") }}")
+        .then(data => data.json())
+        .then(data => data.map(snippet => {
+            const html = render_snippet(snippet);
+            document.body.appendChild(html)
+        }
+        ));
+    </script>
+{% endblock %}
