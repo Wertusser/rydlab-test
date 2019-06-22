@@ -4,23 +4,45 @@
 {% endblock %}
 {% block content %}
     <form>
-        <textarea name="code" id="code" cols="30" rows="10"></textarea>
+        <div class="text-edit">
+        </div>
+        <div class="editor">
+            <button id="addtext" class="button">Добавить еще</button>
+            <input class="button" type="file" value="Загрузить c диска">
+            <p>
+                <input type="url" placeholder="Вставте URL файла">
+                <input class="button" type="button" value="Загрузить">
+            </p>
+        </div>
+        <label for="is_public">Доступен всем</label>
+        <input type="checkbox" name="is_public" id="is_public">
+        <button id="submit" type="button" class="button">Сохранить</button>
     </form>
 {% endblock %}
 {% block js %}
     <script>
-        const onSave = e => {
-            {#e.preventDefault();#}
+        document.querySelector("#addtext").onclick = e => {
+            e.preventDefault();
+            const editor = createEditor();
+            document.querySelector("form div.text-edit").appendChild(editor);
+        };
+        document.querySelector("#submit").onsubmit = e => {
+            e.preventDefault();
             const data = {
                 "title": "hello world!",
                 "is_public": true,
                 "description": "this is description!",
                 "files": [
-                    {"filename": "hello.py", "text":"print('hello world!')"},
-                    {"filename": "hello.js", "text":"console.log('hello world!')"}
-                    ]};
+                    {"filename": "hello.py", "text": "print('hello world!')\n".repeat(20)},
+                    {"filename": "hello.js", "text": "console.log('hello world!')\n".repeat(20)}
+                ]
+            };
             fetch("{{ url_for("api.snippets_list") }}", {method: 'POST', body: JSON.stringify(data)})
                 .then(data => data.json())
+                .then(data => {
+                    const snippet_id = data.result.snippet_id;
+                    window.location.href = `{{ url_for("snippet", snippet_id="") }}${snippet_id}`
+                })
         }
     </script>
 {% endblock %}

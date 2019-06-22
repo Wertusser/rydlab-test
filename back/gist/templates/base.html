@@ -3,16 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for("static", filename="css/style.css") }}">
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/github.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
     <title>{% block title %}
     {% endblock %}</title>
 </head>
 <body>
-    <div class="header">
-        <a href="{{ url_for("index") }}">X</a>
+<div class="header">
+    <div class="logo"><a href="{{ url_for("index") }}">Gist</a></div>
+    <div class="button">
+        <a href="{{ url_for("create") }}">Создать сниппет</a>
     </div>
+</div>
+<main>
     {% block content %}
     {% endblock %}
-    {% block js %}
-    {% endblock %}
+</main>
+<script src="{{ url_for("static", filename="js/utils.js") }}"></script>
+<script src="{{ url_for("static", filename="js/render.js") }}"></script>
+<script src="{{ url_for("static", filename="js/highlight.js") }}"></script>
+{% block js %}
+{% endblock %}
 </body>
 </html>

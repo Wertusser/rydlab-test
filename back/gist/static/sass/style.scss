@@ -1,4 +1,67 @@
+@import "mixins";
+@import "variables";
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
 a {
-  color: #000;
-  size: 211px;
+  text-decoration: none;
+}
+
+main {
+  max-width: 80rem;
+  padding: 2rem;
+  margin: auto;
+  background: $background-base;
+}
+
+.header {
+  @include flex(row, space-between);
+  height: min-content;
+  padding: 10px;
+  background: $header-color;
+
+  .logo > a {
+    color: $font-header;
+    font-weight: bold;
+    font-size: xx-large;
+  }
+}
+
+.button {
+  @include button($button-primary, $font-header);
+}
+
+.snippet {
+  margin-bottom: 10px;
+
+  .header {
+    background: $background-base;
+  }
+}
+
+.file {
+  border: 1px solid darken($background-base, 30%);
+  margin-bottom: 40px;
+
+  .header {
+    background: darken($background-base, 10%);
+  }
+}
+
+form {
+  textarea {
+    resize: vertical;
+    width: 100%;
+    height: 70vh;
+  }
+}
+
+.editor {
+  @include flex(row, space-around);
+  height: min-content;
+  padding: 10px;
+  margin-bottom: 20px;
 }

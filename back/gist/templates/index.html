@@ -3,42 +3,29 @@
     Все сниппеты
 {% endblock %}
 {% block content %}
-    <a href="{{ url_for("create") }}">Создать сниппет</a>
+    <div class="container"></div>
+    <button id="more" class="button">Загрузить еще</button>
 {% endblock %}
 {% block js %}
     <script>
-        const render_file = data => {
-            const file = document.createElement('div');
-            file.classList.add('file');
-            file.innerHTML = `
-            <div class="header">
-                <span>${data.filename}</span>
-            </div>
-            <div class="text">
-                ${data.text}
-            </div>
-        `;
-            return file;
+        let page = 1;
+        const getMore = () => {
+            fetch(`{{ url_for("api.snippets_list") }}?page=${page}`)
+                .then(data => data.json())
+                .then(data => data.result.map(snippet => {
+                        const extensions = snippet.files.map(file => file.extension);
+                        snippet.frequency = frequency(extensions);
+                        snippet.files = [snippet.files[0]];
+                        const html = renderSnippet(snippet);
+                        document.querySelector(".container").appendChild(html)
+                    }
+                )).then(_ => highlight("pre code"));
+            page++;
         };
-        const render_snippet = data => {
-            const snippet = document.createElement('div');
-            snippet.classList.add('snippet');
-            snippet.innerHTML = `
-            <div class="header">
-                <a href="/snippet/${data.snippet_id}">${data.title}</a>
-            </div>
-            <div class="files">
-                ${data.files.map(file => render_file(file).innerHTML).join("\n")}
-            </div>
-        `;
-            return snippet;
-        };
-        fetch("{{ url_for("api.snippets_list") }}")
-            .then(data => data.json())
-            .then(data => data.result.map(snippet => {
-                    const html = render_snippet(snippet);
-                    document.body.appendChild(html)
-                }
-            ));
+        getMore();
+        document.querySelector("#more").onclick = e => {
+            e.preventDefault();
+            getMore();
+        }
     </script>
 {% endblock %}

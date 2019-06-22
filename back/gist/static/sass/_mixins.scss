@@ -1,0 +1,23 @@
+@mixin button($background-color, $font-color) {
+  display: block;
+  width: fit-content;
+  height: min-content;
+  background: $background-color;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+  &:hover {
+    background: darken($background-color, 10%);
+  }
+  > a {
+    color: $font-color;
+    font-weight: bold;
+    text-decoration: none;
+  }
+}
+
+@mixin flex($direction, $content) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $content;
+}

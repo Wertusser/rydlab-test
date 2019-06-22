@@ -21,7 +21,7 @@ class ApiSnippetList(Resource):
             .select()\
             .where(Snippet.is_public)\
             .order_by(Snippet.created_at.desc())\
-            .paginate(request.args.get("page", 0), 10)
+            .paginate(int(request.args.get("page", 0)), 10)
         snippets = [snippet for snippet in query]
         return snippets, 200
 

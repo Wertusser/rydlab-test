@@ -16,8 +16,9 @@ services:
       DB_PASS: ${DB_PASS}
       DB_HOST: db
       PORT: ${PORT}
+      DEBUG: ${DEBUG}
       HTTP_WORKERS: ${HTTP_WORKERS-4}
     ports:
-      - 5000:${PORT}
+      - 8000:${PORT}
     depends_on:
       - db
