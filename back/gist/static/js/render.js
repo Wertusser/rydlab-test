@@ -5,7 +5,9 @@ const renderFile = data => {
             <div class="header">
                 <span>${data.filename}</span>
             </div>
-            <pre><code class="${data.extension}">${data.text}</code></pre>
+            <pre><code class="${data.extension}">${data.text.replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')}</code></pre>
         `;
     return file;
 };
