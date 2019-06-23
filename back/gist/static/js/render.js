@@ -26,12 +26,12 @@ const renderSnippet = data => {
     return snippet;
 };
 
-const createEditor = () => {
+const createEditor = (filename, text) => {
     const textarea = document.createElement("div");
     textarea.classList.add('text-editor');
     textarea.innerHTML = `
-        <input type="text" placeholder="filename" />
-        <textarea class="code" />
+        <input class="filename" type="text" placeholder="filename" value="${filename}" />
+        <textarea class="code">${text}</textarea>
         `;
     return textarea;
 };

@@ -4,11 +4,13 @@
 {% endblock %}
 {% block content %}
     <form>
+        <input type="url" placeholder="Название сниппета" id="title">
         <div class="text-edit">
         </div>
         <div class="editor">
             <button id="addtext" class="button">Добавить еще</button>
-            <input class="button" type="file" value="Загрузить c диска">
+            <input id="files" class="button" type="file" accept="text/*" multiple
+                   value="Загрузить c диска" onchange="handleFiles(this.files)">
             <p>
                 <input type="url" placeholder="Вставте URL файла">
                 <input class="button" type="button" value="Загрузить">
@@ -21,21 +23,34 @@
 {% endblock %}
 {% block js %}
     <script>
+        const handleFiles = files => {
+            console.log("uploading files!");
+            [...files].map(file => {
+                const reader = new FileReader();
+                reader.onloadend = e => {
+                    console.log("file", file.name);
+                    const editor = createEditor(file.name, e.target.result);
+                    document.querySelector("form div.text-edit").appendChild(editor);
+                };
+                reader.readAsText(file);
+            });
+        };
         document.querySelector("#addtext").onclick = e => {
             e.preventDefault();
-            const editor = createEditor();
+            const editor = createEditor("", "");
             document.querySelector("form div.text-edit").appendChild(editor);
         };
-        document.querySelector("#submit").onsubmit = e => {
+
+        document.querySelector("#submit").onclick = e => {
             e.preventDefault();
+            const editorData = handleEditor(document.querySelectorAll(".filename"),
+                document.querySelectorAll(".code"));
+            const uploadData = handleFiles(document.querySelector("#files").files);
             const data = {
-                "title": "hello world!",
-                "is_public": true,
+                "title": document.querySelector("#title").value,
+                "is_public": document.querySelector("#is_public").checked,
                 "description": "this is description!",
-                "files": [
-                    {"filename": "hello.py", "text": "print('hello world!')\n".repeat(20)},
-                    {"filename": "hello.js", "text": "console.log('hello world!')\n".repeat(20)}
-                ]
+                "files": editorData.concat(uploadData)
             };
             fetch("{{ url_for("api.snippets_list") }}", {method: 'POST', body: JSON.stringify(data)})
                 .then(data => data.json())

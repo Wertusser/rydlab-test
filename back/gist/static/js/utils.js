@@ -11,3 +11,9 @@ const frequency = array => {
 const pronounceFile = amount => {
     return amount > 1 ? "files" : "file"
 };
+
+const handleEditor = (filenames, editors) => {
+  return  [...filenames].map((item, i) => {
+      return {filename: item.value, text: editors[i].value}
+  });
+};

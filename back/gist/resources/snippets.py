@@ -17,10 +17,10 @@ class ApiSnippet(Resource):
 class ApiSnippetList(Resource):
     @marshal_with(snippet_fields, envelope="result")
     def get(self):
-        query = Snippet\
-            .select()\
-            .where(Snippet.is_public)\
-            .order_by(Snippet.created_at.desc())\
+        query = Snippet \
+            .select() \
+            .where(Snippet.is_public) \
+            .order_by(Snippet.created_at.desc()) \
             .paginate(int(request.args.get("page", 0)), 10)
         snippets = [snippet for snippet in query]
         return snippets, 200
@@ -29,13 +29,12 @@ class ApiSnippetList(Resource):
     def post(self):
         data = request.get_json(force=True)
         snippet = Snippet.create(title=data.get("title", ""),
-                                 description=data.get("description", ""),
                                  is_public=data.get("is_public", True))
         for file in data.get("files", []):
-            filename = file.get("filename", "")
-            File.create(snippet=snippet,
-                        filename=filename,
-                        text=file.get("text", ""),
-                        extension=filename.split(".")[-1],
-                        is_binary=False)
+            if file:
+                filename = file.get("filename", "")
+                File.create(snippet=snippet,
+                            filename=filename,
+                            text=file.get("text", ""),
+                            extension=filename.split(".")[-1] or "txt")
         return snippet, 200

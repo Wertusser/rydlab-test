@@ -12,7 +12,6 @@ class BaseModel(Model):
 class Snippet(BaseModel):
     snippet_id = UUIDField(unique=True, default=uuid4)
     title = CharField()
-    description = TextField()
     created_at = DateTimeField(default=datetime.now)
     is_public = BooleanField()
 
@@ -22,4 +21,3 @@ class File(BaseModel):
     filename = CharField()
     text = TextField()
     extension = CharField()
-    is_binary = BooleanField()
