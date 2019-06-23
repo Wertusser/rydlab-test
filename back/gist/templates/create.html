@@ -24,11 +24,9 @@
 {% block js %}
     <script>
         const handleFiles = files => {
-            console.log("uploading files!");
             [...files].map(file => {
                 const reader = new FileReader();
                 reader.onloadend = e => {
-                    console.log("file", file.name);
                     const editor = createEditor(file.name, e.target.result);
                     document.querySelector("form div.text-edit").appendChild(editor);
                 };
