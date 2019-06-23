@@ -4,7 +4,6 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-requests = "*"
 
 [packages]
 flask = "*"
@@ -13,6 +12,7 @@ flask-cors = "*"
 peewee = "*"
 psycopg2 = "*"
 gunicorn = "*"
+requests = "*"
 
 [requires]
 python_version = "3.7"

@@ -13,7 +13,15 @@ const pronounceFile = amount => {
 };
 
 const handleEditor = (filenames, editors) => {
-  return  [...filenames].map((item, i) => {
-      return {filename: item.value, text: editors[i].value}
-  });
+    return [...filenames].map((item, i) => {
+        return {filename: item.value, text: editors[i].value}
+    });
+};
+
+const base64UrlEncode = unencoded => {
+    let encoded = btoa(unencoded);
+    return encoded
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
 };

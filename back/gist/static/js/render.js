@@ -14,7 +14,8 @@ const renderSnippet = data => {
     snippet.classList.add('snippet');
     snippet.innerHTML = `
             <div class="header">
-                <a href="/snippet/${data.snippet_id}">${data.title}</a>
+                <a href="/snippet/${data.snippet_id}">${data.title || "untitled"}</a>
+                <span>Created ${data.created_at}</span>
             </div>
             ${data.frequency ? data.frequency.map(item => `
                 <span>${item[0]}: ${item[1]} ${pronounceFile(item[1])}</span>

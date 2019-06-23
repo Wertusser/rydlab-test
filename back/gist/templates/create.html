@@ -12,8 +12,8 @@
             <input id="files" class="button" type="file" accept="text/*" multiple
                    value="Загрузить c диска" onchange="handleFiles(this.files)">
             <p>
-                <input type="url" placeholder="Вставте URL файла">
-                <input class="button" type="button" value="Загрузить">
+                <input id="url" type="url" placeholder="Вставте URL файла">
+                <input id="url-btn" class="button" type="button" value="Загрузить">
             </p>
         </div>
         <label for="is_public">Доступен всем</label>
@@ -34,6 +34,16 @@
                 };
                 reader.readAsText(file);
             });
+        };
+        document.querySelector("#url-btn").onclick = e => {
+            e.preventDefault();
+            const url = document.querySelector("#url").value;
+            fetch(`{{ url_for("api.url_process", url="") }}${base64UrlEncode(url)}`)
+                .then(data => data.json())
+                .then(data => {
+                    const editor = createEditor("", data.result.text);
+                    document.querySelector("form div.text-edit").appendChild(editor);
+                })
         };
         document.querySelector("#addtext").onclick = e => {
             e.preventDefault();

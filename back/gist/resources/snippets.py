@@ -30,7 +30,7 @@ class ApiSnippetList(Resource):
         data = request.get_json(force=True)
         snippet = Snippet.create(title=data.get("title", ""),
                                  is_public=data.get("is_public", True))
-        for file in data.get("files", []):
+        for file in data.get("files", [])[::-1]:
             if file:
                 filename = file.get("filename", "")
                 File.create(snippet=snippet,
