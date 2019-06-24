@@ -13,6 +13,7 @@ class UrlProcessing(Resource):
         url = base64.b64decode(base64_url).decode()
         r = requests.get(url)
         if r.headers['content-type'].startswith("text/plain"):
-            return {"text": r.text[:max_file_size]}, 200
+            text = r.text[:max_file_size]
+            return {"text": text}, 200
         else:
             abort(400, message="This is not a text file!")
