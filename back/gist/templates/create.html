@@ -64,12 +64,11 @@
             e.preventDefault();
             const editorData = handleEditor(document.querySelectorAll(".filename"),
                 document.querySelectorAll(".code"));
-            const uploadData = handleFiles(document.querySelector("#files").files);
             const data = {
                 "title": document.querySelector("#title").value,
                 "is_public": document.querySelector("#is_public").checked,
                 "description": "this is description!",
-                "files": editorData.concat(uploadData)
+                "files": editorData
             };
             fetch("{{ url_for("api.snippets_list") }}", {method: 'POST', body: JSON.stringify(data)})
                 .then(data => data.json())
