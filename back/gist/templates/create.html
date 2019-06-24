@@ -10,7 +10,7 @@
         <div class="editor">
             <button id="addtext" class="button">Добавить еще</button>
             <input id="files" class="button" type="file" accept="text/*" multiple
-                   value="Загрузить c диска" onchange="handleFiles(this.files)">
+                   value="Загрузить c диска" onchange="handleFiles(this)">
             <p>
                 <input id="url" type="url" placeholder="Вставте URL файла">
                 <input id="url-btn" class="button" type="button" value="Загрузить">
@@ -23,14 +23,25 @@
 {% endblock %}
 {% block js %}
     <script>
-        const handleFiles = files => {
+        const handleFiles = instance => {
+            instance.disabled = true;
+            const files = instance.files;
             [...files].map(file => {
                 const reader = new FileReader();
-                reader.onloadend = e => {
-                    const editor = createEditor(file.name, e.target.result);
-                    document.querySelector("form div.text-edit").appendChild(editor);
-                };
-                reader.readAsText(file);
+                // 1MB max size
+                if (file.size <= 1024 * 1024 && file.type.startsWith("text/")) {
+                    reader.onloadend = e => {
+                        const editor = createEditor(file.name, e.target.result);
+                        document.querySelector("form div.text-edit").appendChild(editor);
+                        instance.value = "";
+                        instance.disabled = false;
+                    };
+                    reader.readAsText(file);
+                } else {
+                    alert("File is too big or it's not a text, max file size: 1 MB");
+                    instance.value = "";
+                    instance.disabled = false;
+                }
             });
         };
         document.querySelector("#url-btn").onclick = e => {

@@ -18,6 +18,7 @@ services:
       PORT: ${PORT}
       DEBUG: ${DEBUG}
       HTTP_WORKERS: ${HTTP_WORKERS-4}
+      MAX_FILE_SIZE: ${MAX_FILE_SIZE}
     ports:
       - 8000:${PORT}
     depends_on:

@@ -2,6 +2,7 @@ from flask_restful import Resource, abort, marshal_with
 from gist.fields.processing import url_processing_fields
 import requests
 import base64
+from gist.config import max_file_size
 
 
 class UrlProcessing(Resource):
@@ -12,6 +13,6 @@ class UrlProcessing(Resource):
         url = base64.b64decode(base64_url).decode()
         r = requests.get(url)
         if r.headers['content-type'].startswith("text/plain"):
-            return {"text": r.text}, 200
+            return {"text": r.text[:max_file_size]}, 200
         else:
-            abort(404, message="This is not a text file!")
+            abort(400, message="This is not a text file!")
