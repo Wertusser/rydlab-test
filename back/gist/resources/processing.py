@@ -11,9 +11,9 @@ class UrlProcessing(Resource):
         base64_url = url.replace("-", "+").replace("_", "/")
         base64_url += "=" * (4 - len(base64_url) % 4)
         url = base64.b64decode(base64_url).decode()
-        r = requests.get(url.strip())
+        r = requests.get(url.strip(), headers={"Range": f"bytes=0-{max_file_size}"})
         if r.headers['content-type'].startswith("text/plain"):
-            text = r.text[:max_file_size]
+            text = r.text
             return {"text": text}, 200
         else:
             abort(400, message="This is not a text file!")
