@@ -19,6 +19,9 @@ const renderSnippet = data => {
                 <a href="/snippet/${data.snippet_id}">${data.title || "untitled"}</a>
                 <span>Created ${data.created_at}</span>
             </div>
+            ${data.frequency ? data.frequency.map(item => `
+                <span>${item[0]}: ${item[1]} ${pronounceFile(item[1])}</span>
+            `) : ""}
             <div class="files">
                 ${data.files.map(file => renderFile(file).outerHTML).join("\n")}
             </div>

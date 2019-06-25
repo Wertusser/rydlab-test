@@ -4,7 +4,7 @@
 {% endblock %}
 {% block content %}
     <div class="container">
-        <div class="stat-wrapper"></div>
+    <div class="stat-wrapper"></div>
     </div>
     <button id="more" class="button">Загрузить еще</button>
 {% endblock %}
@@ -23,10 +23,12 @@
                     return data;
                 })
                 .then(data => data.result.map(snippet => {
+                        const extensions = snippet.files.map(file => file.extension);
+                        snippet.frequency = frequency(extensions);
                         snippet.files = [snippet.files[0]];
                         snippet.files[0].text = snippet.files[0].text.split("\n").slice(0, 10).join("\n") + "\n...";
                         const html = renderSnippet(snippet);
-                        document.querySelector(".container").appendChild(html);
+                        document.querySelector(".container").appendChild(html)
                     }
                 )).then(_ => highlight("pre code"));
             page++;
