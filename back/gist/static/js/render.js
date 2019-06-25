@@ -20,7 +20,7 @@ const renderSnippet = data => {
                 <span>Created ${data.created_at}</span>
             </div>
             ${data.frequency ? data.frequency.map(item => `
-                <span>${item[0]}: ${item[1]} ${pronounceFile(item[1])}</span>
+                <span>${item[0]}: ${Math.floor((item[1] / data.amount) * 100)}%</span>
             `) : ""}
             <div class="files">
                 ${data.files.map(file => renderFile(file).outerHTML).join("\n")}

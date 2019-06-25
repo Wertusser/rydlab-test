@@ -15,6 +15,7 @@
                 .then(data => data.result.map(snippet => {
                         const extensions = snippet.files.map(file => file.extension);
                         snippet.frequency = frequency(extensions);
+                        snippet.amount = snippet.files.length;
                         snippet.files = [snippet.files[0]];
                         snippet.files[0].text = snippet.files[0].text.split("\n").slice(0,10).join("\n") + "\n...";
                         const html = renderSnippet(snippet);
