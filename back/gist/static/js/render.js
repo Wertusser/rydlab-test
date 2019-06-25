@@ -5,9 +5,9 @@ const renderFile = data => {
             <div class="header">
                 <span>${data.filename}</span>
             </div>
-            <pre><code class="${data.extension}">${data.text.replace(/&/g,'&amp;')
-        .replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;')}</code></pre>
+            <pre><code class="${data.extension}">${data.text.replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')}</code></pre>
         `;
     return file;
 };
@@ -19,9 +19,6 @@ const renderSnippet = data => {
                 <a href="/snippet/${data.snippet_id}">${data.title || "untitled"}</a>
                 <span>Created ${data.created_at}</span>
             </div>
-            ${data.frequency ? data.frequency.map(item => `
-                <span>${item[0]}: ${Math.floor((item[1] / data.amount) * 100)}%</span>
-            `) : ""}
             <div class="files">
                 ${data.files.map(file => renderFile(file).outerHTML).join("\n")}
             </div>
@@ -37,4 +34,13 @@ const createEditor = (filename, text) => {
         <textarea class="code">${text}</textarea>
         `;
     return textarea;
+};
+
+const createStatistic = (freq, amount) => {
+    const statistic = document.createElement("div");
+    statistic.classList.add('statistic');
+    statistic.innerHTML = freq.map(item => `
+    <span>${item[0]}: ${Math.floor((item[1] / amount) * 100)}%</span>
+    `).join(", ");
+    return statistic;
 };

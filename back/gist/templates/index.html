@@ -3,7 +3,9 @@
     Все сниппеты
 {% endblock %}
 {% block content %}
-    <div class="container"></div>
+    <div class="container">
+        <div class="stat-wrapper"></div>
+    </div>
     <button id="more" class="button">Загрузить еще</button>
 {% endblock %}
 {% block js %}
@@ -12,14 +14,19 @@
         const getMore = () => {
             fetch(`{{ url_for("api.snippets_list") }}?page=${page}`)
                 .then(data => data.json())
+                .then(data => {
+                    const ext = data.result.map(snippet => snippet.files.map(file => file.extension)).flat();
+                    const freq = frequency(ext);
+                    const amount = ext.length;
+                    const stat = createStatistic(freq, amount);
+                    document.querySelector(".stat-wrapper").appendChild(stat);
+                    return data;
+                })
                 .then(data => data.result.map(snippet => {
-                        const extensions = snippet.files.map(file => file.extension);
-                        snippet.frequency = frequency(extensions);
-                        snippet.amount = snippet.files.length;
                         snippet.files = [snippet.files[0]];
-                        snippet.files[0].text = snippet.files[0].text.split("\n").slice(0,10).join("\n") + "\n...";
+                        snippet.files[0].text = snippet.files[0].text.split("\n").slice(0, 10).join("\n") + "\n...";
                         const html = renderSnippet(snippet);
-                        document.querySelector(".container").appendChild(html)
+                        document.querySelector(".container").appendChild(html);
                     }
                 )).then(_ => highlight("pre code"));
             page++;

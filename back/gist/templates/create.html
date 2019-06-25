@@ -54,7 +54,11 @@
                 .then(data => {
                     const editor = createEditor("", data.result.text);
                     document.querySelector("form div.text-edit").appendChild(editor);
-                })
+                    e.value = "";
+                }).catch(err => {
+                    alert("File is too big or it's not a text, max file size: 1 MB");
+                    e.value = "";
+            })
         };
         document.querySelector("#addtext").onclick = e => {
             e.preventDefault();
