@@ -11,7 +11,7 @@ const renderFile = data => {
         `;
     return file;
 };
-const renderSnippet = data => {
+const renderSnippet = (data) => {
     const snippet = document.createElement('div');
     snippet.classList.add('snippet');
     snippet.innerHTML = `
@@ -19,11 +19,13 @@ const renderSnippet = data => {
                 <a href="/snippet/${data.snippet_id}">${data.title || "untitled"}</a>
                 <span>Created ${data.created_at}</span>
             </div>
-            ${data.frequency ? data.frequency.map(item => `
+            ${data.statistic ? data.statistic.map(item => `
                 <span>${item[0]}: ${item[1]} ${pronounceFile(item[1])}</span>
             `) : ""}
             <div class="files">
-                ${data.files.map(file => renderFile(file).outerHTML).join("\n")}
+                ${data.isFull ?
+        data.files.map(file => renderFile(file).outerHTML).join("\n") :
+        renderFile(data.file).outerHTML}
             </div>
         `;
     return snippet;
@@ -39,11 +41,11 @@ const createEditor = (filename, text) => {
     return textarea;
 };
 
-const createStatistic = (freq, amount) => {
+const createStatistic = (data) => {
     const statistic = document.createElement("div");
     statistic.classList.add('statistic');
-    statistic.innerHTML = freq.map(item => `
-    <span>${item[0]}: ${Math.floor((item[1] / amount) * 100)}%</span>
+    statistic.innerHTML = data.result.langs.map(item => `
+    <span>${item.name}: ${item.amount}%</span>
     `).join(", ");
     return statistic;
 };
